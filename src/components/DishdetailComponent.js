@@ -4,27 +4,10 @@ import moment from 'moment';
 
 class DishDetail extends Component{
 
-  renderDish(dish){
-    if (dish != null)
-        return(
-            <Card>
-                <CardImg top src={dish.image} alt={dish.name} />
-                <CardBody>
-                  <CardTitle>{dish.name}</CardTitle>
-                  <CardText>{dish.description}</CardText>
-                </CardBody>
-            </Card>
-        );
-    else
-        return(
-            <div></div>
-        );
-  }
-
   renderComments(dish){
     const comment = dish.comments.map( (comment) => {
       return (
-        <ul class = "list-unstyled">
+        <ul class = "list-unstyled" key={comment.id}>
           <li>{comment.comment}</li>
           <br></br>
           <li>-- {comment.author}, {moment(comment.date).format("MMM DD, YYYY")}</li>
@@ -49,6 +32,24 @@ class DishDetail extends Component{
     }
   }
 
+  renderDish(dish){
+    if (dish != null)
+        return(
+            <Card>
+                <CardImg top src={dish.image} alt={dish.name} />
+                <CardBody>
+                  <CardTitle>{dish.name}</CardTitle>
+                  <CardText>{dish.description}</CardText>
+
+                </CardBody>
+            </Card>
+        );
+    else
+        return(
+            <div></div>
+        );
+  }
+
   render(){
     return(
       <div className="container">
@@ -57,11 +58,12 @@ class DishDetail extends Component{
                       {this.renderDish(this.props.dish)}
                     </div>
                     <div  className="col-12 col-md-5 m-1">
-                      {this.renderComments(this.props.dish)}
+                      {this.props.dish && this.renderComments(this.props.dish)}
                     </div>
                 </div>
       </div>
     )
+
   }
 }
 
