@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Loading from './LoadingComponent';
 import { baseUrl } from "../shared/baseUrl";
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -99,15 +100,21 @@ class CommentForm extends Component{
 
 
   function RenderComments({comments, postComment, dishId}){
-    const comment = comments.map( (comment) => {
-      return (
-        <ul className= "list-unstyled" key={comment.id}>
-          <li>{comment.comment}</li>
-          <br></br>
-          <li>-- {comment.author}, {moment(comment.date).format("MMM DD, YYYY")}</li>
-        </ul>
-      )
-    })
+    const comment =
+    <Stagger in>{
+      comments.map( (comment) => {
+        return (
+          <Fade in>
+          <ul className= "list-unstyled" key={comment.id}>
+            <li>{comment.comment}</li>
+            <br></br>
+            <li>-- {comment.author}, {moment(comment.date).format("MMM DD, YYYY")}</li>
+          </ul>
+          </Fade>
+        )
+      })}
+    </Stagger>
+
     if (comment!= null)
       return(
         <div>
@@ -131,14 +138,19 @@ class CommentForm extends Component{
   function RenderDish({dish}){
     if (dish != null)
         return(
+          <FadeTransform
+              in
+              transformProps={{
+                  exitTransform: 'scale(0.5) translateY(-50%)'
+              }}>
             <Card>
                 <CardImg top src={baseUrl + dish.image} alt={dish.name} />
                 <CardBody>
-                  <CardTitle>{dish.name}</CardTitle>
-                  <CardText>{dish.description}</CardText>
-
+                    <CardTitle>{dish.name}</CardTitle>
+                    <CardText>{dish.description}</CardText>
                 </CardBody>
             </Card>
+          </FadeTransform>
         );
     else
         return(
