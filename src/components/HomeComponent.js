@@ -44,7 +44,9 @@ const Home = (props) => {
             errMess = {props.promosErrMess}/>
         </div>
         <div className="col-12 col-md m-1">
-          <RenderCard item={props.leader} />
+          <RenderCard item={props.leader}
+          isLoading = {props.leadersLoading}
+          errMesss = {props.leadersErrMess} />
         </div>
       </div>
     </div>

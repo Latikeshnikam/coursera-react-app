@@ -2,12 +2,21 @@ import React, { Component } from 'react';
 import { Breadcrumb, BreadcrumbItem, Button, Label, Col, Row } from 'reactstrap';
 import { Control, Form, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
+import { postFeedback } from '../redux/ActionCreators';
+import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
+import { actions } from "react-redux-form";
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
 const isNumber = (val) => !isNaN(Number(val));
 const validEmail = (val) => /^[A-Z0-9,_%+=]+@[A-Z0-9,-]+\.[A-Z]{2,4}$/i.test(val)
+
+const mapDispatchToProps = (dispatch) => ({
+  resetFeedBackForm: () => { dispatch(actions.reset('feedback'))},
+  postFeedback: (firstname, lastname, telnum, email, agree, contactType, message) => dispatch(postFeedback(firstname, lastname, telnum, email, agree, contactType, message))
+})
 
 class Contact extends Component {
   constructor(props){
@@ -16,7 +25,7 @@ class Contact extends Component {
   }
 
   handleSubmit(values){
-    console.log("Current state is:" + JSON.stringify(values));
+    this.props.postFeedback(values.firstname, values.lastname, values.telnum, values.email, values.agree, values.contactType, values.message);
     alert("Current state is:" + JSON.stringify(values));
     this.props.resetFeedBackForm();
   }
@@ -191,4 +200,4 @@ class Contact extends Component {
   };
 
 }
-export default Contact;
+export default withRouter(connect(null, mapDispatchToProps)(Contact));
